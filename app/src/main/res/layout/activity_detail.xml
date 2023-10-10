@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.detail.DetailActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+      <ImageView
+          android:id="@+id/img_detail"
+          android:layout_width="0dp"
+          android:layout_height="250dp"
+          android:src="@drawable/ic_place_holder"
+          app:layout_constraintBottom_toTopOf="@+id/tv_auth"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.537"
+          android:layout_marginBottom="16dp"
+          app:layout_constraintStart_toStartOf="parent" />
+
+      <TextView
+          android:id="@+id/tv_auth"
+          android:layout_marginBottom="32dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:textStyle="bold"
+          android:textColor="@color/black"
+          android:text="@string/title_addstory"
+          app:layout_constraintBottom_toTopOf="@+id/tv_desc"
+          app:layout_constraintStart_toStartOf="parent" />
+
+      <TextView
+          android:id="@+id/tv_desc"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:text="@string/text_list_story"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
