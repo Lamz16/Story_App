@@ -9,9 +9,14 @@ import com.lamz.storyapp.data.pref.UserPreference
 import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.LoginResponse
-import com.lamz.storyapp.response.RegisterResponse
+import com.lamz.storyapp.response.UploadRegisterResponse
 import kotlinx.coroutines.flow.Flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
+import java.io.File
 
 class UserRepository private constructor(
     private val userPreference: UserPreference,
@@ -38,7 +43,7 @@ class UserRepository private constructor(
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, RegisterResponse::class.java)
+            val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
             emit(errorResponse.message?.let { ResultState.Error(it) })
         }
 
@@ -76,6 +81,26 @@ class UserRepository private constructor(
         } catch (e: HttpException) {
             e.message
         }
+    }
+
+    fun uploadImage(imageFile: File, description: String) = liveData {
+        emit(ResultState.Loading)
+        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        try {
+            val successResponse = apiService.uploadImage(multipartBody, requestBody)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
+            emit(errorResponse.message?.let { ResultState.Error(it) })
+        }
+
     }
 
 

@@ -2,7 +2,7 @@ package com.lamz.storyapp.response
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterResponse(
+data class UploadRegisterResponse(
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,

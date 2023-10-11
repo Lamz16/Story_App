@@ -22,5 +22,6 @@
     <string name="gallery">Galeri</string>
     <string name="description">Description</string>
     <string name="upload">Upload</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
 
 </resources>
