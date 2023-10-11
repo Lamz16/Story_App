@@ -3,6 +3,7 @@ package com.lamz.storyapp.view.detail
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.bumptech.glide.Glide
 import com.lamz.storyapp.databinding.ActivityDetailBinding
@@ -37,7 +38,9 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-
+        viewModel.Loading.observe(this) {
+            showLoading(it)
+        }
     }
 
     private fun setDetailStory(story: DetailResponse) {
@@ -46,6 +49,10 @@ class DetailActivity : AppCompatActivity() {
         Glide.with(this).load(story.story?.photoUrl)
             .centerCrop()
             .into(binding?.imgDetail!!)
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

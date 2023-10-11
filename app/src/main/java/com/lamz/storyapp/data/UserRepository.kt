@@ -1,6 +1,7 @@
 package com.lamz.storyapp.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.lamz.storyapp.api.ApiService
@@ -22,6 +23,9 @@ class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
+
+    private val _isLoading = MutableLiveData<Boolean>()
+    val Loading: LiveData<Boolean> = _isLoading
 
 
     suspend fun saveSession(user: UserModel) {
@@ -75,9 +79,11 @@ class UserRepository private constructor(
     }
 
     fun getDetailStories(id: String): LiveData<DetailResponse> = liveData {
+        _isLoading.value = true
         try {
             val response = apiService.getDetailStories(id)
             emit(response)
+            _isLoading.value = false
         } catch (e: HttpException) {
             e.message
         }

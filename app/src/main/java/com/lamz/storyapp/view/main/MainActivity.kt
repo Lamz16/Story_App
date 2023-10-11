@@ -48,14 +48,18 @@ class MainActivity : AppCompatActivity() {
             if (story != null) {
                 when (story) {
                     is ResultState.Loading -> {
+                        showLoading(true)
                     }
                     is ResultState.Success -> {
 
                         val storyData = story.data.listStory
                         storyAdapter.submitList(storyData)
                         binding?.rvListStory?.adapter = storyAdapter
+
+                        showLoading(false)
                     }
                     is ResultState.Error -> {
+                        showLoading(false)
                     }
                 }
             }
@@ -127,6 +131,10 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }
