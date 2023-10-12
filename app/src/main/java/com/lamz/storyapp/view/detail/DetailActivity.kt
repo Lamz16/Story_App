@@ -29,18 +29,19 @@ class DetailActivity : AppCompatActivity() {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             }
-        }
+            val detail = intent.getStringExtra(EXTRA_ID)
+            if (detail != null) {
+                viewModel.getDetailStories(user.token,detail).observe(this) { story ->
+                    setDetailStory(story)
+                }
+            }
 
-        val detail = intent.getStringExtra(EXTRA_ID)
-        if (detail != null) {
-            viewModel.getDetailStories(detail).observe(this) { story ->
-                setDetailStory(story)
+            viewModel.Loading.observe(this) {
+                showLoading(it)
             }
         }
 
-        viewModel.Loading.observe(this) {
-            showLoading(it)
-        }
+
     }
 
     private fun setDetailStory(story: DetailResponse) {

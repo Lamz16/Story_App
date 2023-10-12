@@ -13,7 +13,7 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
         return repository.getSession().asLiveData()
     }
 
-    fun getDetailStories(id: String) = repository.getDetailStories(id)
+    fun getDetailStories(token : String , id: String) = repository.getDetailStories(token ,id)
 
 
 }

@@ -2,6 +2,6 @@ package com.lamz.storyapp.data.pref
 
 data class UserModel(
     val email: String,
-    val token: String,
+    var token: String,
     val isLogin: Boolean = false
 )

@@ -2,7 +2,6 @@ package com.lamz.storyapp.view.signup
 
 import androidx.lifecycle.ViewModel
 import com.lamz.storyapp.data.UserRepository
-import java.io.File
 
 class SignupViewModel(private val repository: UserRepository) : ViewModel() {
 

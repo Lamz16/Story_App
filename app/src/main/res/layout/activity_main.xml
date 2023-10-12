@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="1"
-        android:backgroundTint="@color/material_dynamic_tertiary90"
+        android:backgroundTint="@color/lavender"
         android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

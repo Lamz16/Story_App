@@ -31,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
         _binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+
         setupView()
         setupAction()
         startAnimation()
@@ -44,15 +45,19 @@ class LoginActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding?.titleTextView, View.ALPHA, 1f).setDuration(100)
-        val message =  ObjectAnimator.ofFloat(binding?.messageTextView, View.ALPHA, 1f).setDuration(100)
+        val message =
+            ObjectAnimator.ofFloat(binding?.messageTextView, View.ALPHA, 1f).setDuration(100)
         val email = ObjectAnimator.ofFloat(binding?.emailTextView, View.ALPHA, 1f).setDuration(100)
-        val emailLay = ObjectAnimator.ofFloat(binding?.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val password = ObjectAnimator.ofFloat(binding?.passwordTextView, View.ALPHA, 1f).setDuration(100)
-        val passwordLay = ObjectAnimator.ofFloat(binding?.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val emailLay =
+            ObjectAnimator.ofFloat(binding?.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
+        val password =
+            ObjectAnimator.ofFloat(binding?.passwordTextView, View.ALPHA, 1f).setDuration(100)
+        val passwordLay =
+            ObjectAnimator.ofFloat(binding?.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val btnLogin = ObjectAnimator.ofFloat(binding?.loginButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
-            playSequentially(title,message,email,emailLay,password,passwordLay,btnLogin)
+            playSequentially(title, message, email, emailLay, password, passwordLay, btnLogin)
             start()
         }
     }
@@ -75,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
             val email = binding?.emailEditText?.text.toString()
             val password = binding?.passwordEditText?.text.toString()
 
-            viewModel.getData(email, password).observe(this){user ->
+            viewModel.getData(email, password).observe(this) { user ->
                 if (user != null) {
                     when (user) {
                         is ResultState.Loading -> {
@@ -85,7 +90,12 @@ class LoginActivity : AppCompatActivity() {
                         is ResultState.Success -> {
                             user.data.message?.let { it1 -> showToast(it1) }
 
-                            viewModel.saveSession(UserModel(email,"${user.data.loginResult?.token}"))
+                            viewModel.saveSession(
+                                UserModel(
+                                    email,
+                                    "${user.data.loginResult?.token}"
+                                )
+                            )
 
                             AlertDialog.Builder(this).apply {
                                 setTitle("Yeah!")
@@ -110,11 +120,12 @@ class LoginActivity : AppCompatActivity() {
                                 setMessage("Daftar dulu ya supaya bisa login")
                                 setPositiveButton("Daftar") { _, _ ->
                                     val intent = Intent(context, WelcomeActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                     startActivity(intent)
                                     finish()
                                 }
-                                setNegativeButton("Login"){_,_ -> }
+                                setNegativeButton("Login") { _, _ -> }
                                 create()
                                 show()
                             }
@@ -130,6 +141,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showLoading(isLoading: Boolean) {
         binding?.progressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

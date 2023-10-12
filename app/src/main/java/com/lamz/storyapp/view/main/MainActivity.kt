@@ -11,6 +11,7 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lamz.storyapp.adapter.ListStoriesAdapter
 import com.lamz.storyapp.data.ResultState
@@ -24,51 +25,49 @@ class MainActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private var _binding: ActivityMainBinding? = null
-    private val binding get() =  _binding
+    private val binding get() = _binding
+    private val storyAdapter = ListStoriesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
+        recyclerView()
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             }
-        }
+            viewModel.getStories(user.token).observe(this) { story ->
 
 
-        val storyAdapter = ListStoriesAdapter()
+                if (story != null) {
+                    when (story) {
+                        is ResultState.Loading -> {
+                            showLoading(true)
+                        }
 
-        viewModel.getStories().observe(this){story ->
+                        is ResultState.Success -> {
 
+                            val storyData = story.data.listStory
+                            storyAdapter.submitList(storyData)
+                            binding?.rvListStory?.adapter = storyAdapter
 
-            if (story != null) {
-                when (story) {
-                    is ResultState.Loading -> {
-                        showLoading(true)
-                    }
-                    is ResultState.Success -> {
+                            showLoading(false)
+                        }
 
-                        val storyData = story.data.listStory
-                        storyAdapter.submitList(storyData)
-                        binding?.rvListStory?.adapter = storyAdapter
-
-                        showLoading(false)
-                    }
-                    is ResultState.Error -> {
-                        showLoading(false)
+                        is ResultState.Error -> {
+                            showLoading(false)
+                        }
                     }
                 }
             }
+
         }
-        binding?.rvListStory?.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = storyAdapter
-        }
+
+
+
 
         setupView()
         setupAction()
@@ -80,14 +79,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun recyclerView() {
+        val layoutManager = LinearLayoutManager(this)
+        binding?.rvListStory?.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding?.rvListStory?.addItemDecoration(itemDecoration)
+    }
+
     private fun startAction() {
-        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_Y,-30f,30f).apply {
+        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_Y, -30f, 30f).apply {
             duration = 2000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_X,-30f,30f).apply {
+        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 1000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
@@ -95,10 +101,11 @@ class MainActivity : AppCompatActivity() {
 
 
         val name = ObjectAnimator.ofFloat(binding?.tagPage, View.ALPHA, 1f).setDuration(100)
-        val btnLogout = ObjectAnimator.ofFloat(binding?.logoutButton, View.ALPHA, 1f).setDuration(100)
+        val btnLogout =
+            ObjectAnimator.ofFloat(binding?.logoutButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
-            playSequentially(name,btnLogout)
+            playSequentially(name, btnLogout)
             start()
         }
 
@@ -125,7 +132,7 @@ class MainActivity : AppCompatActivity() {
                 setPositiveButton("Ya") { _, _ ->
                     viewModel.logout()
                 }
-                setNegativeButton("Tidak"){_,_ -> }
+                setNegativeButton("Tidak") { _, _ -> }
                 create()
                 show()
             }

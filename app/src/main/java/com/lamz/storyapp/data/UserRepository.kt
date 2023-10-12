@@ -66,10 +66,10 @@ class UserRepository private constructor(
 
     }
 
-    fun getStories() = liveData {
+    fun getStories(token : String) = liveData {
         emit(ResultState.Loading)
         try {
-            val successResponse = apiService.getStories()
+            val successResponse = apiService.getStories("Bearer $token")
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
@@ -78,10 +78,10 @@ class UserRepository private constructor(
         }
     }
 
-    fun getDetailStories(id: String): LiveData<DetailResponse> = liveData {
+    fun getDetailStories(token : String, id: String): LiveData<DetailResponse> = liveData {
         _isLoading.value = true
         try {
-            val response = apiService.getDetailStories(id)
+            val response = apiService.getDetailStories("Bearer $token",id)
             emit(response)
             _isLoading.value = false
         } catch (e: HttpException) {
@@ -89,7 +89,7 @@ class UserRepository private constructor(
         }
     }
 
-    fun uploadImage(imageFile: File, description: String) = liveData {
+    fun uploadImage(token : String, imageFile: File, description: String) = liveData {
         emit(ResultState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
@@ -99,7 +99,7 @@ class UserRepository private constructor(
             requestImageFile
         )
         try {
-            val successResponse = apiService.uploadImage(multipartBody, requestBody)
+            val successResponse = apiService.uploadImage("Bearer $token",multipartBody, requestBody)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

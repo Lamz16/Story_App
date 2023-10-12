@@ -127,7 +127,7 @@ class SignupActivity : AppCompatActivity() {
 
     private fun setMyButtonEnable() {
         val result = myEditText.text
-        myButton.isEnabled = result?.length!! > 8
+        myButton.isEnabled = result?.length!! > 7
     }
 
 

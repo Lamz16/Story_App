@@ -36,11 +36,13 @@ class CameraActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
+            }else{
+                binding?.uploadButton?.setOnClickListener { uploadImage(user.token) }
             }
 
             binding?.galleryButton?.setOnClickListener { startGallery() }
             binding?.cameraButton?.setOnClickListener { startCamera() }
-            binding?.uploadButton?.setOnClickListener { uploadImage() }
+
         }
     }
 
@@ -79,14 +81,14 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImage() {
+    private fun uploadImage(token : String) {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             Log.d("Image File", "showImage: ${imageFile.path}")
             val description = binding?.edtDescription?.text.toString()
             showLoading(true)
 
-            viewModel.uploadImage(imageFile, description).observe(this){result ->
+            viewModel.uploadImage(token ,imageFile, description).observe(this){result ->
                 if (result != null){
                     when(result){
                         is ResultState.Loading -> {
