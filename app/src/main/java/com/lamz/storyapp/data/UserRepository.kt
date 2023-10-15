@@ -57,6 +57,7 @@ class UserRepository private constructor(
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.login(name, password)
+            saveSession(UserModel(name, "${successResponse.loginResult?.token}"))
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()

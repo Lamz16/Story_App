@@ -2,7 +2,6 @@ package com.lamz.storyapp.view.camera
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.lamz.storyapp.R
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.databinding.ActivityCameraBinding
@@ -22,7 +22,7 @@ class CameraActivity : AppCompatActivity() {
     private val viewModel by viewModels<CameraViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private var _binding : ActivityCameraBinding? = null
+    private var _binding: ActivityCameraBinding? = null
     private val binding get() = _binding
     private var currentImageUri: Uri? = null
 
@@ -36,7 +36,7 @@ class CameraActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            }else{
+            } else {
                 binding?.uploadButton?.setOnClickListener { uploadImage(user.token) }
             }
 
@@ -81,16 +81,16 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadImage(token : String) {
+    private fun uploadImage(token: String) {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             Log.d("Image File", "showImage: ${imageFile.path}")
             val description = binding?.edtDescription?.text.toString()
             showLoading(true)
 
-            viewModel.uploadImage(token ,imageFile, description).observe(this){result ->
-                if (result != null){
-                    when(result){
+            viewModel.uploadImage(token, imageFile, description).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
                         is ResultState.Loading -> {
                             showLoading(true)
                         }
@@ -114,13 +114,13 @@ class CameraActivity : AppCompatActivity() {
             }
 
 
-
         } ?: showToast(getString(R.string.empty_image_warning))
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding?.progressIndicator?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }

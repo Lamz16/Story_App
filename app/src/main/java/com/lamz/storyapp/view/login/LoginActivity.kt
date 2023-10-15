@@ -13,7 +13,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.lamz.storyapp.data.ResultState
-import com.lamz.storyapp.data.pref.UserModel
 import com.lamz.storyapp.databinding.ActivityLoginBinding
 import com.lamz.storyapp.view.ViewModelFactory
 import com.lamz.storyapp.view.main.MainActivity
@@ -89,20 +88,13 @@ class LoginActivity : AppCompatActivity() {
 
                         is ResultState.Success -> {
                             user.data.message?.let { it1 -> showToast(it1) }
-
-                            viewModel.saveSession(
-                                UserModel(
-                                    email,
-                                    "${user.data.loginResult?.token}"
-                                )
-                            )
-
                             AlertDialog.Builder(this).apply {
                                 setTitle("Yeah!")
                                 setMessage("Anda berhasil login. Sudah tidak sabar untuk Menulis ya?")
                                 setPositiveButton("Lanjut") { _, _ ->
                                     val intent = Intent(context, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                                     startActivity(intent)
                                     finish()
                                 }
