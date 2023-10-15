@@ -57,16 +57,13 @@ class SignupActivity : AppCompatActivity() {
         }.start()
 
         val title = ObjectAnimator.ofFloat(binding?.titleTextView, View.ALPHA, 1f).setDuration(100)
-        val name = ObjectAnimator.ofFloat(binding?.nameTextView, View.ALPHA, 1f).setDuration(100)
         val nameEditLay = ObjectAnimator.ofFloat(binding?.nameEditTextLayout, View.ALPHA , 1f).setDuration(100)
-        val email = ObjectAnimator.ofFloat(binding?.emailTextView, View.ALPHA, 1f).setDuration(100)
         val emailLay = ObjectAnimator.ofFloat(binding?.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val password = ObjectAnimator.ofFloat(binding?.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordLay = ObjectAnimator.ofFloat(binding?.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val btnSign = ObjectAnimator.ofFloat(binding?.signupButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
-            playSequentially(title,name,nameEditLay,email,emailLay,password, passwordLay, btnSign)
+            playSequentially(title,nameEditLay,emailLay, passwordLay, btnSign)
             start()
         }
     }

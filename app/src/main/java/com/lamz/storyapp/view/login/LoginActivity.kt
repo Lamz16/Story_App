@@ -46,17 +46,14 @@ class LoginActivity : AppCompatActivity() {
         val title = ObjectAnimator.ofFloat(binding?.titleTextView, View.ALPHA, 1f).setDuration(100)
         val message =
             ObjectAnimator.ofFloat(binding?.messageTextView, View.ALPHA, 1f).setDuration(100)
-        val email = ObjectAnimator.ofFloat(binding?.emailTextView, View.ALPHA, 1f).setDuration(100)
         val emailLay =
             ObjectAnimator.ofFloat(binding?.emailEditTextLayout, View.ALPHA, 1f).setDuration(100)
-        val password =
-            ObjectAnimator.ofFloat(binding?.passwordTextView, View.ALPHA, 1f).setDuration(100)
         val passwordLay =
             ObjectAnimator.ofFloat(binding?.passwordEditTextLayout, View.ALPHA, 1f).setDuration(100)
         val btnLogin = ObjectAnimator.ofFloat(binding?.loginButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
-            playSequentially(title, message, email, emailLay, password, passwordLay, btnLogin)
+            playSequentially(title, message, emailLay, passwordLay, btnLogin)
             start()
         }
     }
