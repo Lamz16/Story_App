@@ -14,8 +14,6 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
             repository.logout()
         }
     }
-    val mainLoading = repository.loading
-    val mainListStory = repository.listStory
 
     fun getStories(token : String) = repository.getStories(token)
 

@@ -10,7 +10,6 @@ import com.lamz.storyapp.data.pref.UserModel
 import com.lamz.storyapp.data.pref.UserPreference
 import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
-import com.lamz.storyapp.response.ListStoryItem
 import com.lamz.storyapp.response.LoginResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import kotlinx.coroutines.flow.Flow
@@ -18,10 +17,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.io.File
 
 class UserRepository private constructor(
@@ -30,7 +26,7 @@ class UserRepository private constructor(
 ) {
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val Loading: LiveData<Boolean> = _isLoading
+    val repoLoading: LiveData<Boolean> = _isLoading
 
 
     suspend fun saveSession(user: UserModel) {
@@ -53,7 +49,7 @@ class UserRepository private constructor(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
-            emit(errorResponse.message?.let { ResultState.Error(it) })
+            emit(errorResponse.message.let { ResultState.Error(it) })
         }
 
     }
@@ -66,7 +62,7 @@ class UserRepository private constructor(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-            emit(errorResponse.message?.let { ResultState.Error(it) })
+            emit(errorResponse.message.let { ResultState.Error(it) })
         }
 
     }
@@ -112,7 +108,7 @@ class UserRepository private constructor(
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
-            emit(errorResponse.message?.let { ResultState.Error(it) })
+            emit(errorResponse.message.let { ResultState.Error(it) })
         }
 
     }
