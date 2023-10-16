@@ -36,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
 
-            viewModel.Loading.observe(this) {
+            viewModel.detailLoading.observe(this) {
                 showLoading(it)
             }
         }
@@ -45,9 +45,9 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setDetailStory(story: DetailResponse) {
-        binding?.tvAuth?.text = story.story?.name
-        binding?.tvDesc?.text = story.story?.description
-        Glide.with(this).load(story.story?.photoUrl)
+        binding?.tvAuth?.text = story.story.name
+        binding?.tvDesc?.text = story.story.description
+        Glide.with(this).load(story.story.photoUrl)
             .centerCrop()
             .into(binding?.imgDetail!!)
     }

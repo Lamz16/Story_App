@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -52,9 +53,19 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
+    //use viewmodel to run async task with coroutine
+
+    //use retrofit and moshi to get data from api
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.12.0")
+
+    //handle error classpath not have same version when use moshi
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
+
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation ("androidx.room:room-ktx:2.5.2")
     implementation("androidx.activity:activity-ktx:1.8.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 

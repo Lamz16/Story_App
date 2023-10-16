@@ -6,6 +6,7 @@ import com.lamz.storyapp.response.LoginResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -38,6 +39,7 @@ interface ApiService {
 
     @GET("stories/{id}")
     suspend fun getDetailStories(@Header("Authorization") token: String,@Path("id") id : String) : DetailResponse
+
 
     @Multipart
     @POST("stories")

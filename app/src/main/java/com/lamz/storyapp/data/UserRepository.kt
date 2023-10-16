@@ -1,5 +1,6 @@
 package com.lamz.storyapp.data
 
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
@@ -9,6 +10,7 @@ import com.lamz.storyapp.data.pref.UserModel
 import com.lamz.storyapp.data.pref.UserPreference
 import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
+import com.lamz.storyapp.response.ListStoryItem
 import com.lamz.storyapp.response.LoginResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +18,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.File
 
 class UserRepository private constructor(
@@ -57,7 +62,6 @@ class UserRepository private constructor(
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.login(name, password)
-            saveSession(UserModel(name, "${successResponse.loginResult?.token}"))
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
@@ -67,15 +71,18 @@ class UserRepository private constructor(
 
     }
 
-    fun getStories(token : String) = liveData {
+    fun getStories(token : String) : LiveData<ResultState<GetListResponse>> = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.getStories("Bearer $token")
+            if (successResponse.error){
+                emit(ResultState.Error("Stories Error ${successResponse.message}"))
+            }else{
+                emit(ResultState.Success(successResponse))
+            }
             emit(ResultState.Success(successResponse))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
-            emit(errorResponse.message?.let { ResultState.Error(it) })
+        } catch (e: Exception) {
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
         }
     }
 
@@ -85,7 +92,7 @@ class UserRepository private constructor(
             val response = apiService.getDetailStories("Bearer $token",id)
             emit(response)
             _isLoading.value = false
-        } catch (e: HttpException) {
+        } catch (e: Exception) {
             e.message
         }
     }

@@ -8,7 +8,8 @@ import com.lamz.storyapp.data.pref.UserModel
 
 class DetailViewModel(private val repository: UserRepository) : ViewModel() {
 
-    val Loading = repository.Loading
+
+    val detailLoading = repository.Loading
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }

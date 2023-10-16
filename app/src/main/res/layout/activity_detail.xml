@@ -28,7 +28,7 @@
 
 
       <ImageView
-          android:id="@+id/img_detail"
+          android:id="@+id/imgDetail"
           android:layout_width="0dp"
           android:layout_height="250dp"
           android:src="@drawable/ic_place_holder"
