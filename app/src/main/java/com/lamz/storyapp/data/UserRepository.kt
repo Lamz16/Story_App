@@ -8,7 +8,6 @@ import com.google.gson.Gson
 import com.lamz.storyapp.api.ApiService
 import com.lamz.storyapp.data.pref.UserModel
 import com.lamz.storyapp.data.pref.UserPreference
-import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.LoginResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
@@ -84,14 +83,17 @@ class UserRepository private constructor(
         }
     }
 
-    fun getDetailStories(token: String, id: String): LiveData<DetailResponse> = liveData {
-        _isLoading.value = true
+    fun getDetailStories(token: String, id: String) = liveData {
+        emit(ResultState.Loading)
         try {
             val response = apiService.getDetailStories("Bearer $token", id)
-            emit(response)
-            _isLoading.value = false
+            emit(ResultState.Success(response))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
+            emit(errorResponse.message.let { ResultState.Error(it) })
         } catch (e: Exception) {
-            e.message
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
         }
     }
 

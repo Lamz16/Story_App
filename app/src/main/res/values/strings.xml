@@ -9,8 +9,9 @@
     <string name="title_login_page">Mari mulai membuka jendela dunia dengan potret terbaikmu</string>
     <string name="name">Nama</string>
     <string name="logout">Keluar</string>
-    <string name="text_list_story">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</string>
+    <string name="text_desc">%s</string>
     <string name="title_addstory">Add\n</string>
+    <string name="auth">Author</string>
     <string name="addStory">Add Story\n</string>
     <string name="title_welcome_page">Selamat datang di Story App!</string>
     <string name="message_welcome_page">Abadikan aktivitas menarik mu bersama keluarga maupun sendiri! \n \n \t Buat dunia menjadi menarik dengan potret terbaik mu\n</string>
@@ -18,6 +19,8 @@
     <string name="gallery">Galeri</string>
     <string name="description">Description</string>
     <string name="upload">Upload</string>
+    <string name="succes"> </string>
+
     <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
 
 </resources>

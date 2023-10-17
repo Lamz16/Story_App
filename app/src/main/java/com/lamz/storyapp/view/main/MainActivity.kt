@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lamz.storyapp.R
 import com.lamz.storyapp.adapter.ListStoriesAdapter
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.databinding.ActivityMainBinding
@@ -21,25 +23,32 @@ import com.lamz.storyapp.view.ViewModelFactory
 import com.lamz.storyapp.view.camera.CameraActivity
 import com.lamz.storyapp.view.welcome.WelcomeActivity
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
         ViewModelFactory.getInstance(this)
     }
     private var _binding: ActivityMainBinding? = null
-    private val binding get() =  _binding
-
-    val internet = false
+    private val binding get() = _binding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        setupView()
+        startAction()
         getSession()
 
-        setupView()
-        setupAction()
-        startAction()
+        binding?.swipe?.setOnRefreshListener {
+            getSession()
+
+            Handler().postDelayed({
+                binding?.swipe?.isRefreshing = false
+            }, 2000)
+        }
+
+
     }
 
     private fun getSession() {
@@ -47,31 +56,39 @@ class MainActivity : AppCompatActivity() {
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            }else{
+            } else {
 
                 val layoutManager = LinearLayoutManager(this)
                 binding?.rvListStory?.layoutManager = layoutManager
                 val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
                 binding?.rvListStory?.addItemDecoration(itemDecoration)
 
-                viewModel.getStories(user.token).observe(this){story ->
+                viewModel.getStories(user.token)
 
-
+                viewModel.story.observe(this) { story ->
                     if (story != null) {
                         when (story) {
                             is ResultState.Loading -> {
                                 binding?.progressBar?.visibility = View.VISIBLE
+                                binding?.tvError?.text = resources.getString(R.string.succes)
                             }
+
                             is ResultState.Success -> {
                                 binding?.progressBar?.visibility = View.GONE
+                                binding?.rvListStory?.visibility = View.VISIBLE
+                                binding?.tvError?.text = resources.getString(R.string.succes)
                                 val storyAdapter = ListStoriesAdapter()
                                 val storyData = story.data.listStory
                                 storyAdapter.submitList(storyData)
                                 binding?.rvListStory?.adapter = storyAdapter
                             }
+
                             is ResultState.Error -> {
-                                binding?.progressBar?.visibility = View.VISIBLE
-                                Toast.makeText(this, "Error"+ story.error, Toast.LENGTH_SHORT).show()
+                                binding?.progressBar?.visibility = View.GONE
+                                binding?.rvListStory?.visibility = View.GONE
+                                binding?.tvError?.text = resources.getString(R.string.text_desc, story.error)
+                                Toast.makeText(this, story.error, Toast.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                     }
@@ -87,13 +104,13 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun startAction() {
-        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_Y,-30f,30f).apply {
+        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_Y, -30f, 30f).apply {
             duration = 2000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_X,-30f,30f).apply {
+        ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 1000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
@@ -101,11 +118,26 @@ class MainActivity : AppCompatActivity() {
 
 
         val name = ObjectAnimator.ofFloat(binding?.tagPage, View.ALPHA, 1f).setDuration(100)
-        val btnLogout = ObjectAnimator.ofFloat(binding?.logoutButton, View.ALPHA, 1f).setDuration(100)
+        val btnLogout =
+            ObjectAnimator.ofFloat(binding?.logoutButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
-            playSequentially(name,btnLogout)
+            playSequentially(name, btnLogout)
             start()
+        }
+
+        binding?.logoutButton?.setOnClickListener {
+
+            AlertDialog.Builder(this).apply {
+                setTitle("Yakin ingin keluar?")
+                setPositiveButton("Ya") { _, _ ->
+                    viewModel.logout()
+                }
+                setNegativeButton("Tidak") { _, _ -> }
+                create()
+                show()
+            }
+
         }
 
     }
@@ -123,20 +155,5 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-    private fun setupAction() {
-        binding?.logoutButton?.setOnClickListener {
-
-            AlertDialog.Builder(this).apply {
-                setTitle("Yakin ingin keluar?")
-                setPositiveButton("Ya") { _, _ ->
-                    viewModel.logout()
-                }
-                setNegativeButton("Tidak"){_,_ -> }
-                create()
-                show()
-            }
-
-        }
-    }
 
 }

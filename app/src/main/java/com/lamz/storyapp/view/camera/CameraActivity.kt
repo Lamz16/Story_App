@@ -96,7 +96,7 @@ class CameraActivity : AppCompatActivity() {
                         }
 
                         is ResultState.Success -> {
-                            result.data.message?.let { showToast(it) }
+                            result.data.message.let { showToast(it) }
                             showLoading(false)
                             val intent = Intent(this, MainActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK

@@ -12,5 +12,5 @@ class CameraViewModel(private val repository: UserRepository) : ViewModel(){
         return repository.getSession().asLiveData()
     }
 
-    fun uploadImage(token : String, file: File, description: String) = repository.uploadImage(token , file, description)
+    fun uploadImage(token : String , file: File, description: String) = repository.uploadImage(token ,file, description)
 }
