@@ -1,5 +1,6 @@
 package com.lamz.storyapp.api
 
+import com.lamz.storyapp.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,7 +13,7 @@ object ApiConfig {
             .addInterceptor(loggingInterceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://story-api.dicoding.dev/v1/")
+            .baseUrl(BuildConfig.API_KEY)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

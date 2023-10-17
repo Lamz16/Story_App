@@ -50,6 +50,8 @@ class UserRepository private constructor(
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
             emit(errorResponse.message.let { ResultState.Error(it) })
+        } catch (e: Exception) {
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
         }
 
     }
@@ -63,29 +65,29 @@ class UserRepository private constructor(
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
             emit(errorResponse.message.let { ResultState.Error(it) })
-        }
-
-    }
-
-    fun getStories(token : String) : LiveData<ResultState<GetListResponse>> = liveData {
-        emit(ResultState.Loading)
-        try {
-            val successResponse = apiService.getStories("Bearer $token")
-            if (successResponse.error){
-                emit(ResultState.Error("Stories Error ${successResponse.message}"))
-            }else{
-                emit(ResultState.Success(successResponse))
-            }
-            emit(ResultState.Success(successResponse))
         } catch (e: Exception) {
             emit(ResultState.Error("Error : ${e.message.toString()}"))
         }
     }
 
-    fun getDetailStories(token : String, id: String): LiveData<DetailResponse> = liveData {
+    fun getStories(token: String): LiveData<ResultState<GetListResponse>> = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getStories("Bearer $token")
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
+            emit(errorResponse.message.let { ResultState.Error(it) })
+        } catch (e: Exception) {
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
+        }
+    }
+
+    fun getDetailStories(token: String, id: String): LiveData<DetailResponse> = liveData {
         _isLoading.value = true
         try {
-            val response = apiService.getDetailStories("Bearer $token",id)
+            val response = apiService.getDetailStories("Bearer $token", id)
             emit(response)
             _isLoading.value = false
         } catch (e: Exception) {
@@ -93,7 +95,7 @@ class UserRepository private constructor(
         }
     }
 
-    fun uploadImage(token : String, imageFile: File, description: String) = liveData {
+    fun uploadImage(token: String, imageFile: File, description: String) = liveData {
         emit(ResultState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
@@ -103,16 +105,18 @@ class UserRepository private constructor(
             requestImageFile
         )
         try {
-            val successResponse = apiService.uploadImage("Bearer $token",multipartBody, requestBody)
+            val successResponse =
+                apiService.uploadImage("Bearer $token", multipartBody, requestBody)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
             emit(errorResponse.message.let { ResultState.Error(it) })
+        } catch (e: Exception) {
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
         }
 
     }
-
 
 
     companion object {

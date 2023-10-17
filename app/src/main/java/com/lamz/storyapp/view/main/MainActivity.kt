@@ -28,11 +28,21 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() =  _binding
 
+    val internet = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        getSession()
+
+        setupView()
+        setupAction()
+        startAction()
+    }
+
+    private fun getSession() {
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
@@ -69,18 +79,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
-
-        setupView()
-        setupAction()
-        startAction()
-
         binding?.storyAdd?.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
     }
+
 
     private fun startAction() {
         ObjectAnimator.ofFloat(binding?.tagPage, View.TRANSLATION_Y,-30f,30f).apply {
