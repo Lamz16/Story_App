@@ -22,5 +22,11 @@
     <string name="succes"> </string>
 
     <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
+    <string name="desc_img_story">Gambar Story</string>
+    <string name="desc_btn_camera">tombol kamera</string>
+    <string name="desc_btn_galery">Tombol galeri</string>
+    <string name="desc_edt_story">deskripsi story</string>
+    <string name="desc_btn_upload">Tombol upload</string>
+    <string name="desc_img_login">Gambar fotografi</string>
 
 </resources>

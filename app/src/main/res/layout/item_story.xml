@@ -16,6 +16,7 @@
         <ImageView
             android:id="@+id/imgStory"
             android:layout_width="match_parent"
+            android:contentDescription="@string/desc_img_story"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             app:layout_constraintHorizontal_bias="0.537"
