@@ -87,7 +87,8 @@ class SignupActivity : AppCompatActivity() {
             val name = binding?.nameEditText?.text.toString()
             val password = binding?.passwordEditText?.text.toString()
 
-            viewModel.uploadData(name,email,password).observe(this) {result ->
+            viewModel.uploadData(name,email,password)
+                viewModel.signUp.observe(this) {result ->
                 if (result != null) {
                     when (result) {
                         is ResultState.Loading -> {

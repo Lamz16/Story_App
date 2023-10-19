@@ -77,7 +77,9 @@ class LoginActivity : AppCompatActivity() {
             val email = binding?.emailEditText?.text.toString()
             val password = binding?.passwordEditText?.text.toString()
 
-            viewModel.getData(email, password).observe(this) { user ->
+
+            viewModel.getData(email, password)
+                viewModel.login.observe(this) { user ->
                 if (user != null) {
                     when (user) {
                         is ResultState.Loading -> {
