@@ -88,9 +88,7 @@ class CameraActivity : AppCompatActivity() {
             val description = binding?.edtDescription?.text.toString()
             showLoading(true)
 
-            viewModel.uploadImage(token, imageFile, description)
-
-                viewModel.upload.observe(this) { result ->
+            viewModel.uploadImage(token, imageFile, description).observe(this) { result ->
                 if (result != null) {
                     when (result) {
                         is ResultState.Loading -> {

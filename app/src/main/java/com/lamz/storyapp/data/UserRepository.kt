@@ -40,7 +40,7 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
-    suspend fun registerAccount(name: String, email: String, password: String) = liveData {
+    fun registerAccount(name: String, email: String, password: String) = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.register(name, email, password)
@@ -55,7 +55,7 @@ class UserRepository private constructor(
 
     }
 
-    suspend fun loginAccount(name: String, password: String) = liveData {
+    fun loginAccount(name: String, password: String) = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.login(name, password)
@@ -69,7 +69,7 @@ class UserRepository private constructor(
         }
     }
 
-    suspend fun getStories(token: String): LiveData<ResultState<GetListResponse>> = liveData {
+    fun getStories(token: String): LiveData<ResultState<GetListResponse>> = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.getStories("Bearer $token")
@@ -83,7 +83,7 @@ class UserRepository private constructor(
         }
     }
 
-    suspend fun getDetailStories(token: String, id: String) = liveData {
+    fun getDetailStories(token: String, id: String) = liveData {
         emit(ResultState.Loading)
         try {
             val response = apiService.getDetailStories("Bearer $token", id)
@@ -97,7 +97,7 @@ class UserRepository private constructor(
         }
     }
 
-    suspend fun uploadImage(token: String, imageFile: File, description: String) = liveData {
+    fun uploadImage(token: String, imageFile: File, description: String) = liveData {
         emit(ResultState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
