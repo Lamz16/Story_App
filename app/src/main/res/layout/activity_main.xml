@@ -9,9 +9,11 @@
     android:background="@color/aureolin"
     tools:context=".view.main.MainActivity">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -36,23 +38,21 @@
             android:text="@string/text_desc"
             app:layout_constraintTop_toTopOf="@+id/rv_listStory" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:backgroundTint="@color/white"
-        android:contentDescription="@string/logout"
-        android:foregroundGravity="bottom"
-        android:src="@drawable/ic_logout"
-        app:fabSize="normal"
-        app:layout_anchorGravity="top|end"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="1"
-        android:focusable="true" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/layTopbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/aureolin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/option_menu" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
         android:id="@+id/tagPage"
@@ -63,7 +63,7 @@
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toStartOf="@+id/logoutButton"
+        app:layout_constraintEnd_toStartOf="@+id/layTopbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,7 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoutButton"/>
+        app:layout_constraintTop_toBottomOf="@id/layTopbar"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/storyAdd"

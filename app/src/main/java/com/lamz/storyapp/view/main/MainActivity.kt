@@ -21,6 +21,7 @@ import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.databinding.ActivityMainBinding
 import com.lamz.storyapp.view.ViewModelFactory
 import com.lamz.storyapp.view.camera.CameraActivity
+import com.lamz.storyapp.view.maps.MapsActivity
 import com.lamz.storyapp.view.welcome.WelcomeActivity
 
 @Suppress("DEPRECATION")
@@ -49,6 +50,8 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+
     }
 
     private fun getSession() {
@@ -57,6 +60,31 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             } else {
+
+                binding?.topAppBar?.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.menu1 -> {
+                            val intent = Intent(this, MapsActivity::class.java)
+                            startActivity(intent)
+                            true
+                        }
+
+                        R.id.menu2 -> {
+                            AlertDialog.Builder(this).apply {
+                                setTitle("Yakin ingin keluar?")
+                                setPositiveButton("Ya") { _, _ ->
+                                    viewModel.logout()
+                                }
+                                setNegativeButton("Tidak") { _, _ -> }
+                                create()
+                                show()
+                            }
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
 
                 val layoutManager = LinearLayoutManager(this)
                 binding?.rvListStory?.layoutManager = layoutManager
@@ -86,7 +114,8 @@ class MainActivity : AppCompatActivity() {
                             is ResultState.Error -> {
                                 binding?.progressBar?.visibility = View.GONE
                                 binding?.rvListStory?.visibility = View.GONE
-                                binding?.tvError?.text = resources.getString(R.string.text_desc, story.error)
+                                binding?.tvError?.text =
+                                    resources.getString(R.string.text_desc, story.error)
                                 Toast.makeText(this, story.error, Toast.LENGTH_SHORT)
                                     .show()
                             }
@@ -118,26 +147,10 @@ class MainActivity : AppCompatActivity() {
 
 
         val name = ObjectAnimator.ofFloat(binding?.tagPage, View.ALPHA, 1f).setDuration(100)
-        val btnLogout =
-            ObjectAnimator.ofFloat(binding?.logoutButton, View.ALPHA, 1f).setDuration(100)
 
         AnimatorSet().apply {
-            playSequentially(name, btnLogout)
+            playSequentially(name)
             start()
-        }
-
-        binding?.logoutButton?.setOnClickListener {
-
-            AlertDialog.Builder(this).apply {
-                setTitle("Yakin ingin keluar?")
-                setPositiveButton("Ya") { _, _ ->
-                    viewModel.logout()
-                }
-                setNegativeButton("Tidak") { _, _ -> }
-                create()
-                show()
-            }
-
         }
 
     }

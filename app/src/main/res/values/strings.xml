@@ -28,5 +28,7 @@
     <string name="desc_edt_story">deskripsi story</string>
     <string name="desc_btn_upload">Tombol upload</string>
     <string name="desc_img_login">Gambar fotografi</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="menu_1">maps</string>
 
 </resources>
