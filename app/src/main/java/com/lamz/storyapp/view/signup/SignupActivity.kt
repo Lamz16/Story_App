@@ -87,7 +87,8 @@ class SignupActivity : AppCompatActivity() {
             val name = binding?.nameEditText?.text.toString()
             val password = binding?.passwordEditText?.text.toString()
 
-            viewModel.uploadData(name,email,password).observe(this) {result ->
+            viewModel.uploadData(name,email,password)
+                viewModel.upload.observe(this) {result ->
                 if (result != null) {
                     when (result) {
                         is ResultState.Loading -> {
@@ -95,7 +96,7 @@ class SignupActivity : AppCompatActivity() {
                         }
 
                         is ResultState.Success -> {
-                            result.data.message?.let { it1 -> showToast(it1) }
+                            result.data.message.let { it1 -> showToast(it1) }
 
                             AlertDialog.Builder(    this).apply {
                                 setTitle("Yeah!")

@@ -40,7 +40,7 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
-    fun registerAccount(name: String, email: String, password: String) = liveData {
+    suspend fun registerAccount(name: String, email: String, password: String) = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.register(name, email, password)
@@ -55,7 +55,7 @@ class UserRepository private constructor(
 
     }
 
-    fun loginAccount(name: String, password: String) = liveData {
+    suspend fun loginAccount(name: String, password: String) = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.login(name, password)
@@ -69,7 +69,21 @@ class UserRepository private constructor(
         }
     }
 
-    fun getStories(token: String): LiveData<ResultState<GetListResponse>> = liveData {
+    suspend fun getStoriesWithLocation(token: String): LiveData<ResultState<GetListResponse>> = liveData {
+        emit(ResultState.Loading)
+        try {
+            val successResponse = apiService.getStoriesWithLocation("Bearer $token")
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
+            emit(errorResponse.message.let { ResultState.Error(it) })
+        } catch (e: Exception) {
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
+        }
+    }
+
+    suspend fun getStories(token: String): LiveData<ResultState<GetListResponse>> = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.getStories("Bearer $token")
@@ -83,7 +97,7 @@ class UserRepository private constructor(
         }
     }
 
-    fun getDetailStories(token: String, id: String) = liveData {
+    suspend fun getDetailStories(token: String, id: String) = liveData {
         emit(ResultState.Loading)
         try {
             val response = apiService.getDetailStories("Bearer $token", id)
@@ -97,7 +111,7 @@ class UserRepository private constructor(
         }
     }
 
-    fun uploadImage(token: String, imageFile: File, description: String) = liveData {
+    suspend fun uploadImage(token: String, imageFile: File, description: String) = liveData {
         emit(ResultState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
         val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())

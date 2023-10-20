@@ -9,6 +9,7 @@ import com.lamz.storyapp.view.camera.CameraViewModel
 import com.lamz.storyapp.view.detail.DetailViewModel
 import com.lamz.storyapp.view.login.LoginViewModel
 import com.lamz.storyapp.view.main.MainViewModel
+import com.lamz.storyapp.view.maps.MapsViewModel
 import com.lamz.storyapp.view.signup.SignupViewModel
 
 class ViewModelFactory(private val repository: UserRepository) : ViewModelProvider.NewInstanceFactory() {
@@ -30,6 +31,8 @@ class ViewModelFactory(private val repository: UserRepository) : ViewModelProvid
             }
             modelClass.isAssignableFrom(CameraViewModel::class.java) -> {
                 CameraViewModel(repository) as T
+            }modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(repository) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

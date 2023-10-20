@@ -17,7 +17,6 @@ class DetailViewModel(private val repository: UserRepository) : ViewModel() {
     private val _detailStory = MutableLiveData<ResultState<DetailResponse>>()
     val detailStory: LiveData<ResultState<DetailResponse>> = _detailStory
 
-    val detailLoading = repository.repoLoading
     fun getSession(): LiveData<UserModel> {
         return repository.getSession().asLiveData()
     }
