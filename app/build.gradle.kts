@@ -41,6 +41,9 @@ android {
         viewBinding = true
         buildConfig = true
     }
+    testOptions{
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -83,6 +86,12 @@ dependencies {
 
     //paging 3
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+
+    //unit testing
+    testImplementation("androidx.arch.core:core-testing:2.2.0") // InstantTaskExecutorRule
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4") //TestDispatcher
+    testImplementation("org.mockito:mockito-core:5.5.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
 
 
 }

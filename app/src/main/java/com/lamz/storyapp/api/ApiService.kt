@@ -3,6 +3,7 @@ package com.lamz.storyapp.api
 import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.LoginResponse
+import com.lamz.storyapp.response.MapsResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -41,7 +42,7 @@ interface ApiService {
     @GET("stories")
     suspend fun getStoriesWithLocation(@Header("Authorization") token: String,
         @Query("location") location : Int = 1,
-    ): GetListResponse
+    ): MapsResponse
 
     @GET("stories/{id}")
     suspend fun getDetailStories(@Header("Authorization") token: String,@Path("id") id : String) : DetailResponse

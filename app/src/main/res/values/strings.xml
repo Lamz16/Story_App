@@ -9,7 +9,8 @@
     <string name="title_login_page">Mari mulai membuka jendela dunia dengan potret terbaikmu</string>
     <string name="name">Nama</string>
     <string name="logout">Keluar</string>
-    <string name="text_desc">Sedang Memuat Data</string>
+    <string name="text_desc">%s</string>
+    <string name="text_desc_main">Memuat Data</string>
     <string name="title_addstory">Add\n</string>
     <string name="auth">Author</string>
     <string name="addStory">Add Story\n</string>

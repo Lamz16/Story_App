@@ -9,14 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.data.UserRepository
 import com.lamz.storyapp.response.GetListResponse
+import com.lamz.storyapp.response.MapsResponse
 import kotlinx.coroutines.launch
 
 class MapsViewModel(private val repository: UserRepository) : ViewModel() {
 
     fun getSession() = repository.getSession().asLiveData()
 
-    private val _location = MutableLiveData<ResultState<GetListResponse>>()
-    val location: LiveData<ResultState<GetListResponse>> = _location
+    private val _location = MutableLiveData<ResultState<MapsResponse>>()
+    val location: LiveData<ResultState<MapsResponse>> = _location
 
     fun getStoriesWithLocation(token: String) {
         viewModelScope.launch {

@@ -2,10 +2,10 @@ package com.lamz.storyapp.response
 
 import com.google.gson.annotations.SerializedName
 
-data class GetListResponse(
+data class MapsResponse(
 
 	@field:SerializedName("listStory")
-	val listStory: List<ListStoryItem> = emptyList(),
+	val listStory: List<ListStoryItems> = emptyList(),
 
 	@field:SerializedName("error")
 	val error: Boolean,
@@ -14,13 +14,7 @@ data class GetListResponse(
 	val message: String
 )
 
-data class ListStoryItem(
-
-	@field:SerializedName("photoUrl")
-	val photoUrl: String   ,
-
-	@field:SerializedName("  ")
-	val createdAt: String   ,
+data class ListStoryItems(
 
 	@field:SerializedName("name")
 	val name: String   ,
@@ -28,6 +22,9 @@ data class ListStoryItem(
 	@field:SerializedName("description")
 	val description: String   ,
 
-	@field:SerializedName("id")
-	val id: String   ,
+	@field:SerializedName("lon")
+	val lon: Double  ,
+
+	@field:SerializedName("lat")
+	val lat: Double
 )

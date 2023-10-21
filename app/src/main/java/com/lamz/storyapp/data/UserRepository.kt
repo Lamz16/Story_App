@@ -15,6 +15,7 @@ import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.ListStoryItem
 import com.lamz.storyapp.response.LoginResponse
+import com.lamz.storyapp.response.MapsResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -70,14 +71,14 @@ class UserRepository private constructor(
         }
     }
 
-    suspend fun getStoriesWithLocation(token: String): LiveData<ResultState<GetListResponse>> = liveData {
+    suspend fun getStoriesWithLocation(token: String): LiveData<ResultState<MapsResponse>> = liveData {
         emit(ResultState.Loading)
         try {
             val successResponse = apiService.getStoriesWithLocation("Bearer $token")
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
+            val errorResponse = Gson().fromJson(errorBody, MapsResponse::class.java)
             emit(errorResponse.message.let { ResultState.Error(it) })
         } catch (e: Exception) {
             emit(ResultState.Error("Error : ${e.message.toString()}"))
