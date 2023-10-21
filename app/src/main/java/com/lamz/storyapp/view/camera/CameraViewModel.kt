@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.data.UserRepository
 import com.lamz.storyapp.data.pref.UserModel
-import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import kotlinx.coroutines.launch
 import java.io.File

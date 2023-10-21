@@ -8,7 +8,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.data.UserRepository
-import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.MapsResponse
 import kotlinx.coroutines.launch
 

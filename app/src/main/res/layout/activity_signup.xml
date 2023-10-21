@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lavender"
-    tools:context=".view.signup.SignupActivity">
+    tools:context=".view.signup.SignupActivity"
+    tools:ignore="Overdraw">
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressIndicator"

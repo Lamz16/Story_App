@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.data.UserRepository
 import com.lamz.storyapp.response.UploadRegisterResponse
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SignupViewModel(private val repository: UserRepository) : ViewModel() {

@@ -11,7 +11,6 @@
     <string name="logout">Keluar</string>
     <string name="text_desc">%s</string>
     <string name="text_desc_main">Memuat Data</string>
-    <string name="title_addstory">Add\n</string>
     <string name="auth">Author</string>
     <string name="addStory">Add Story\n</string>
     <string name="title_welcome_page">Selamat datang di Story App!</string>
@@ -20,13 +19,10 @@
     <string name="gallery">Galeri</string>
     <string name="description">Description</string>
     <string name="upload">Upload</string>
-    <string name="succes"> </string>
-
     <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
     <string name="desc_img_story">Gambar Story</string>
     <string name="desc_btn_camera">tombol kamera</string>
     <string name="desc_btn_galery">Tombol galeri</string>
-    <string name="desc_edt_story">deskripsi story</string>
     <string name="desc_btn_upload">Tombol upload</string>
     <string name="desc_img_login">Gambar fotografi</string>
     <string name="title_activity_maps">MapsActivity</string>

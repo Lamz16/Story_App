@@ -12,7 +12,6 @@ import com.lamz.storyapp.api.ApiService
 import com.lamz.storyapp.data.pref.UserModel
 import com.lamz.storyapp.data.pref.UserPreference
 import com.lamz.storyapp.response.DetailResponse
-import com.lamz.storyapp.response.GetListResponse
 import com.lamz.storyapp.response.ListStoryItem
 import com.lamz.storyapp.response.LoginResponse
 import com.lamz.storyapp.response.MapsResponse
