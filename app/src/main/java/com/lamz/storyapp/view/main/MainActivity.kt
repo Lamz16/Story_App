@@ -9,15 +9,13 @@ import android.os.Handler
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lamz.storyapp.R
 import com.lamz.storyapp.adapter.ListStoriesAdapter
-import com.lamz.storyapp.data.ResultState
+import com.lamz.storyapp.adapter.LoadingStateAdapter
 import com.lamz.storyapp.databinding.ActivityMainBinding
 import com.lamz.storyapp.view.ViewModelFactory
 import com.lamz.storyapp.view.camera.CameraActivity
@@ -37,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        binding?.rvListStory?.layoutManager = LinearLayoutManager(this)
+
         setupView()
         startAction()
         getSession()
@@ -48,10 +48,6 @@ class MainActivity : AppCompatActivity() {
                 binding?.swipe?.isRefreshing = false
             }, 2000)
         }
-
-
-
-
     }
 
     private fun getSession() {
@@ -86,41 +82,20 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val layoutManager = LinearLayoutManager(this)
-                binding?.rvListStory?.layoutManager = layoutManager
-                val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-                binding?.rvListStory?.addItemDecoration(itemDecoration)
-
-                viewModel.getStories(user.token)
-
-                viewModel.story.observe(this) { story ->
-                    if (story != null) {
-                        when (story) {
-                            is ResultState.Loading -> {
-                                binding?.progressBar?.visibility = View.VISIBLE
-                                binding?.tvError?.text = resources.getString(R.string.succes)
-                            }
-
-                            is ResultState.Success -> {
-                                binding?.progressBar?.visibility = View.GONE
-                                binding?.rvListStory?.visibility = View.VISIBLE
-                                binding?.tvError?.text = resources.getString(R.string.succes)
-                                val storyAdapter = ListStoriesAdapter()
-                                val storyData = story.data.listStory
-                                storyAdapter.submitList(storyData)
-                                binding?.rvListStory?.adapter = storyAdapter
-                            }
-
-                            is ResultState.Error -> {
-                                binding?.progressBar?.visibility = View.GONE
-                                binding?.rvListStory?.visibility = View.GONE
-                                binding?.tvError?.text =
-                                    resources.getString(R.string.text_desc, story.error)
-                                Toast.makeText(this, story.error, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
+                val adapter = ListStoriesAdapter()
+                binding?.rvListStory?.adapter = adapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter{
+                        adapter.retry()
                     }
+                )
+                viewModel.getStories(user.token).observe(this) {
+                    if (it != null){
+                        binding?.tvError?.visibility = View.GONE
+                        adapter.submitData(lifecycle, it)
+                    }else{
+                        binding?.tvError?.visibility = View.VISIBLE
+                    }
+
                 }
             }
         }

@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.lamz.storyapp.data.ResultState
 import com.lamz.storyapp.data.UserRepository
 import com.lamz.storyapp.response.GetListResponse
+import com.lamz.storyapp.response.ListStoryItem
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: UserRepository) : ViewModel() {
@@ -22,12 +25,6 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
         }
     }
 
-    fun getStories(token: String) {
-        viewModelScope.launch {
-            repository.getStories(token).asFlow().collect{
-                _story.value = it
-            }
-        }
-    }
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>> = repository.getStories(token).cachedIn(viewModelScope)
 
 }

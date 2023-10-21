@@ -81,5 +81,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
+    //paging 3
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+
 
 }

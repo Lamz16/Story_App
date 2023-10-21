@@ -2,13 +2,18 @@ package com.lamz.storyapp.data
 
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.google.gson.Gson
 import com.lamz.storyapp.api.ApiService
 import com.lamz.storyapp.data.pref.UserModel
 import com.lamz.storyapp.data.pref.UserPreference
+import com.lamz.storyapp.response.DetailResponse
 import com.lamz.storyapp.response.GetListResponse
+import com.lamz.storyapp.response.ListStoryItem
 import com.lamz.storyapp.response.LoginResponse
 import com.lamz.storyapp.response.UploadRegisterResponse
 import kotlinx.coroutines.flow.Flow
@@ -23,10 +28,6 @@ class UserRepository private constructor(
     private val userPreference: UserPreference,
     private val apiService: ApiService
 ) {
-
-    private val _isLoading = MutableLiveData<Boolean>()
-    val repoLoading: LiveData<Boolean> = _isLoading
-
 
     suspend fun saveSession(user: UserModel) {
         userPreference.saveSession(user)
@@ -83,18 +84,15 @@ class UserRepository private constructor(
         }
     }
 
-    suspend fun getStories(token: String): LiveData<ResultState<GetListResponse>> = liveData {
-        emit(ResultState.Loading)
-        try {
-            val successResponse = apiService.getStories("Bearer $token")
-            emit(ResultState.Success(successResponse))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
-            emit(errorResponse.message.let { ResultState.Error(it) })
-        } catch (e: Exception) {
-            emit(ResultState.Error("Error : ${e.message.toString()}"))
-        }
+    fun getStories(token: String): LiveData<PagingData<ListStoryItem>>{
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoriesPagingSource(apiService,token)
+            }
+        ).liveData
     }
 
     suspend fun getDetailStories(token: String, id: String) = liveData {
@@ -104,7 +102,7 @@ class UserRepository private constructor(
             emit(ResultState.Success(response))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, GetListResponse::class.java)
+            val errorResponse = Gson().fromJson(errorBody, DetailResponse::class.java)
             emit(errorResponse.message.let { ResultState.Error(it) })
         } catch (e: Exception) {
             emit(ResultState.Error("Error : ${e.message.toString()}"))
