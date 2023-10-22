@@ -18,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,8 +35,9 @@ class MainViewModelTest {
     @get:Rule
     val mainDispatcherRules = MainDispatcherRule()
 
-    @Mock
-    private lateinit var repository: UserRepository
+    private lateinit var mainViewModel: MainViewModel
+
+    @Mock private lateinit var repository: UserRepository
     private val token =
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyLWs5dTdUNnFwTkU3bEVfWS0iLCJpYXQiOjE2OTc4Nzk5NTl9.VSjUz8Logi0UU_T-OHFPm81s_MmfhoGAhvTBrjFpFqY"
 
@@ -46,9 +48,12 @@ class MainViewModelTest {
         val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()
         expectedStory.value = data
 
+        @Before
+        mainViewModel = MainViewModel(repository)
+
         Mockito.`when`(repository.getStories(token)).thenReturn(expectedStory)
 
-        val actualStory: PagingData<ListStoryItem> = repository.getStories(token).getOrAwaitValue()
+        val actualStory: PagingData<ListStoryItem> = mainViewModel.getStories(token).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = ListStoriesAdapter.DIFF_CALLBACK,
@@ -68,9 +73,12 @@ class MainViewModelTest {
         val expectedStory = MutableLiveData<PagingData<ListStoryItem>>()
         expectedStory.value = data
 
+        @Before
+        mainViewModel = MainViewModel(repository)
+
         Mockito.`when`(repository.getStories(token)).thenReturn(expectedStory)
 
-        val actualStory: PagingData<ListStoryItem> = repository.getStories(token).getOrAwaitValue()
+        val actualStory: PagingData<ListStoryItem> = mainViewModel.getStories(token).getOrAwaitValue()
 
         val differ = AsyncPagingDataDiffer(
             diffCallback = ListStoriesAdapter.DIFF_CALLBACK,
