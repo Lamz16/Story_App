@@ -28,5 +28,6 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="menu_1">maps</string>
     <string name="retry">Coba lagi</string>
+    <string name="start_point">My location\n</string>
 
 </resources>

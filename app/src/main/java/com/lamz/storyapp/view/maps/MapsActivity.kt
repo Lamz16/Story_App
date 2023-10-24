@@ -136,5 +136,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    //use live template logt to create this
 }

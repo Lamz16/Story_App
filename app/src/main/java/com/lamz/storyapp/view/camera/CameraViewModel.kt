@@ -21,6 +21,16 @@ class CameraViewModel(private val repository: UserRepository) : ViewModel() {
         return repository.getSession().asLiveData()
     }
 
+// with location
+    fun uploadImage(token: String, file: File, description: String, lat : String, lon : String) {
+        viewModelScope.launch {
+            repository.uploadImage(token, file, description, lat, lon).asFlow().collect {
+                _upload.value = it
+            }
+        }
+    }
+
+    // without location
     fun uploadImage(token: String, file: File, description: String) {
         viewModelScope.launch {
             repository.uploadImage(token, file, description).asFlow().collect {

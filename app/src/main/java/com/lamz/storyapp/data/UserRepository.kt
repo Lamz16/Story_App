@@ -109,6 +109,32 @@ class UserRepository private constructor(
         }
     }
 
+    //    Dengan lokasi upload image nya
+    suspend fun uploadImage(token: String, imageFile: File, description: String, lat : String, lon : String) = liveData {
+        emit(ResultState.Loading)
+        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val lat = lat.toRequestBody("text/plain".toMediaType())
+        val lon = lon.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        try {
+            val successResponse = apiService.uploadImage("Bearer $token", multipartBody, requestBody, lat , lon)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, UploadRegisterResponse::class.java)
+            emit(errorResponse.message.let { ResultState.Error(it) })
+        } catch (e: Exception) {
+            emit(ResultState.Error("Error : ${e.message.toString()}"))
+        }
+
+    }
+
+    //    Tidak dengan lokasi upload image nya
     suspend fun uploadImage(token: String, imageFile: File, description: String) = liveData {
         emit(ResultState.Loading)
         val requestBody = description.toRequestBody("text/plain".toMediaType())
@@ -119,8 +145,7 @@ class UserRepository private constructor(
             requestImageFile
         )
         try {
-            val successResponse =
-                apiService.uploadImage("Bearer $token", multipartBody, requestBody)
+            val successResponse = apiService.uploadImage("Bearer $token", multipartBody, requestBody)
             emit(ResultState.Success(successResponse))
         } catch (e: HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
